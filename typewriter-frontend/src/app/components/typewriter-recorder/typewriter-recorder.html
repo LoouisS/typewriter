@@ -1,0 +1,30 @@
+<div class="minimal-language-info">
+    <span class="minimal-language-dot"></span>spanish
+    <span class="minimal-language-dot lazy"></span>lazy
+    <span class="minimal-language-meta">avg: 105 wpm 98% acc</span>
+    <span class="minimal-language-meta active">610 90% acc</span>
+  </div>
+  <div class="minimal-words-panel">
+    @for (wordState of wordsState(); track $index) {
+      <span [class]="getWordClasses(wordState)">
+        @if (wordState.isActive) {
+          @for (charState of currentWordWithChars(); track $index) {
+            <span [class]="getCharClasses(charState)">{{ charState.char }}</span>
+          }
+        } @else {
+          {{ wordState.text }}
+        }
+      </span>
+    }
+  </div>
+  <div class="minimal-restart" (click)="handleEscape()">
+    <span class="minimal-restart-icon">⟳</span>
+  </div>
+
+  <!-- Debug info (opcional, se puede remover en producción) -->
+  <div class="debug-info" style="margin-top: 20px; font-size: 12px; color: #666;">
+    <div>Palabra actual: "{{ currentWord() }}"</div>
+    <div>Entrada actual: "{{ currentInput() }}"</div>
+    <div>Índice palabra: {{ currentWordIndex() }}</div>
+    <div>Palabras completadas: {{ completedWords().length }}</div>
+  </div>

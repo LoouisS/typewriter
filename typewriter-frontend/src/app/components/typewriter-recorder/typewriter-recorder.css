@@ -1,0 +1,128 @@
+.minimal-language-info {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+    font-size: 1.05rem;
+    opacity: 0.7;
+  }
+  
+.minimal-language-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #3fa7ff;
+    margin-right: 0.3rem;
+  }
+  .minimal-language-dot.lazy {
+    background: #ffb300;
+  }
+  .minimal-language-meta {
+    color: #bfc1c9;
+    opacity: 0.7;
+    font-size: 1rem;
+  }
+  .minimal-language-meta.active {
+    color: #ffb300;
+    opacity: 1;
+    font-weight: bold;
+  }
+  .minimal-words-panel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem 1.2rem;
+    font-size: 2.1rem;
+    color: #bfc1c9;
+    margin-bottom: 2.5rem;
+    max-width: 1100px;
+    min-height: 120px;
+    line-height: 2.5rem;
+    user-select: none;
+  }
+  
+  /* Estados de las palabras */
+  .minimal-word {
+    opacity: 0.5;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  
+  .minimal-word.highlighted {
+    background: #ffeb3b;
+    color: #23242a;
+    border-radius: 0.2rem;
+    padding: 0 0.2rem;
+    opacity: 1;
+    font-weight: bold;
+  }
+  
+  .minimal-word.correct {
+    color: #4caf50;
+    opacity: 0.8;
+  }
+  
+  .minimal-word.incorrect {
+    color: #f44336;
+    opacity: 0.8;
+  }
+  
+  /* Estados de los caracteres */
+  .minimal-char {
+    position: relative;
+    transition: all 0.15s ease;
+  }
+  
+  .minimal-char.correct {
+    color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+  }
+  
+  .minimal-char.incorrect {
+    color: #f44336;
+    background: rgba(244, 67, 54, 0.2);
+    text-decoration: underline;
+    text-decoration-color: #f44336;
+  }
+  
+  .minimal-char.active {
+    background: rgba(255, 235, 59, 0.3);
+    animation: blink 1s infinite;
+  }
+  
+  /* Animación para el cursor activo */
+  @keyframes blink {
+    0%, 50% {
+      background: rgba(255, 235, 59, 0.3);
+    }
+    51%, 100% {
+      background: rgba(255, 235, 59, 0.7);
+    }
+  }
+  
+.minimal-restart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+  .minimal-restart-icon {
+    font-size: 2.2rem;
+    color: #bfc1c9;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .minimal-restart-icon:hover {
+    opacity: 1;
+    color: #ffeb3b;
+  }
+
+  /* Debug info styles */
+  .debug-info {
+    font-family: 'Courier New', monospace;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid #ffeb3b;
+  }
