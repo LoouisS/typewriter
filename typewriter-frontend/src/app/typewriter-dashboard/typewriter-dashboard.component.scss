@@ -39,30 +39,8 @@
   font-size: 1.1rem;
   margin-left: 0.8rem;
 }
-.minimal-options-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  height: 44px;
-  background: #23242a;
-  border-bottom: 1px solid #31323a;
-  font-size: 1.05rem;
-}
-.minimal-option {
-  color: #bfc1c9;
-  opacity: 0.7;
-  padding: 0.2rem 0.7rem;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.minimal-option.active {
-  background: #31323a;
-  color: #ffb300;
-  opacity: 1;
-  font-weight: bold;
-}
+
+
 .minimal-main {
   flex: 1;
   display: flex;

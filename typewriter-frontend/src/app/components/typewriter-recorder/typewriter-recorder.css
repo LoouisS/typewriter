@@ -28,6 +28,44 @@
     opacity: 1;
     font-weight: bold;
   }
+
+  /* Controles de configuración */
+  .minimal-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .minimal-control-btn {
+    background: transparent;
+    border: 1px solid #bfc1c9;
+    color: #bfc1c9;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    outline: none;
+  }
+
+  .minimal-control-btn:hover {
+    border-color: #ffeb3b;
+    color: #ffeb3b;
+    background: rgba(255, 235, 59, 0.1);
+  }
+
+  .minimal-control-btn.active {
+    background: #ffeb3b;
+    color: #23242a;
+    border-color: #ffeb3b;
+    font-weight: bold;
+  }
+
+  .minimal-control-btn:focus {
+    box-shadow: 0 0 0 2px rgba(255, 235, 59, 0.3);
+  }
+
   .minimal-words-panel {
     display: flex;
     flex-wrap: wrap;
@@ -98,6 +136,7 @@
     51%, 100% {
       background: rgba(255, 235, 59, 0.7);
     }
+
   }
   
 .minimal-restart {
@@ -126,3 +165,582 @@
     border-radius: 4px;
     border-left: 3px solid #ffeb3b;
   }
+  
+  .typewriter-container {
+    font-size: 2rem;
+  }
+
+  .test-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem;
+  }
+
+  .test-control-btn {
+    background: transparent;
+  }
+
+  /* Display del timer mejorado */
+  .timer-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(191, 193, 201, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .timer-display.warning {
+    background: rgba(255, 179, 0, 0.1);
+    border-color: rgba(255, 179, 0, 0.3);
+    box-shadow: 0 0 20px rgba(255, 179, 0, 0.2);
+  }
+
+  .timer-value {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #bfc1c9;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    letter-spacing: 0.1em;
+  }
+
+  .timer-progress, .word-progress-bar {
+    width: 200px;
+    height: 4px;
+    background: rgba(191, 193, 201, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .word-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .word-count {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: #bfc1c9;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3fa7ff, #63c2ff);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .timer-display.warning .progress-bar {
+    background: linear-gradient(90deg, #ffb300, #ffc947);
+  }
+
+@keyframes pulse-warning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Controles de test */
+.control-btn {
+  background: transparent;
+  border: 1px solid #bfc1c9;
+  color: #bfc1c9;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.control-btn:hover {
+  border-color: #ffb300;
+  color: #ffb300;
+  background: rgba(255, 179, 0, 0.1);
+}
+
+.control-icon {
+  font-size: 1rem;
+}
+
+/* Instrucciones de inicio */
+.start-instructions {
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.instruction-text {
+  font-size: 1.2rem;
+  color: #bfc1c9;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Panel de debug */
+.debug-panel {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #bfc1c9;
+  opacity: 0.6;
+}
+
+.debug-row {
+  margin-bottom: 0.25rem;
+}
+
+/* Estilos para el viewport de palabras con sistema de filas inmutables */
+.words-viewport {
+  width: 100%; /* Ancho completo disponible */
+  margin: 0 auto; /* Centrado horizontal */
+  font-size: 2rem;
+  line-height: 1.5; /* Optimizado para exactamente 3 filas */
+  color: #bfc1c9;
+  user-select: none;
+  padding: 1rem;
+  position: relative;
+  
+  /* Altura exacta para 3 filas completas sin cortes */
+  height: 11rem; /* Optimizado para exactamente 3 líneas */
+  min-height: 11rem;
+  max-height: 11rem;
+  overflow: hidden; /* Ocultar contenido que exceda */
+  
+  /* Transición suave para cambios de contenido */
+  transition: all 0.3s ease-out;
+}
+
+/* Estilos para cada fila inmutable */
+.word-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem; /* Gap uniforme entre palabras */
+  align-items: baseline;
+  margin-bottom: 0.5rem; /* Espaciado entre filas */
+  min-height: 3rem; /* Altura mínima consistente para cada fila */
+  line-height: 3rem; /* Alineación vertical de palabras */
+  
+  /* Transición suave para efectos de scroll */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* Efecto de entrada para filas nuevas */
+.word-row:last-child {
+  animation: slideInFromBottom 0.4s ease-out;
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(3rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Estilos para las palabras dentro de las filas */
+.word-row .minimal-word {
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  white-space: nowrap; /* Evita que las palabras se rompan */
+  flex-shrink: 0; /* Evita que se compriman */
+  height: 3rem; /* Altura fija para consistencia */
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0; /* Sin margen adicional */
+}
+
+/* Estados destacados de las palabras */
+.word-row .minimal-word.highlighted {
+  background: #ffb300;
+  color: #23242a;
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.3rem;
+  opacity: 1;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(255, 179, 0, 0.3);
+  transform: scale(1.02); /* Ligero aumento de tamaño */
+}
+
+.word-row .minimal-word.correct {
+  color: #4caf50;
+  opacity: 0.8;
+}
+
+.word-row .minimal-word.incorrect {
+  color: #f44336;
+  opacity: 0.8;
+  text-decoration: line-through;
+  text-decoration-color: rgba(244, 67, 54, 0.6);
+}
+
+/* Estilos para transiciones de scroll suave basadas en la fila actual */
+.words-viewport[data-current-row="0"] {
+  /* Primera fila - sin efectos especiales */
+}
+
+.words-viewport[data-current-row="1"] {
+  /* Segunda fila - preparándose para scroll */
+}
+
+.words-viewport[data-current-row="2"],
+.words-viewport[data-current-row="3"],
+.words-viewport[data-current-row="4"] {
+  /* Tercera fila y posteriores - efecto de scroll activo */
+  animation: scrollTransition 0.4s ease-out;
+}
+
+@keyframes scrollTransition {
+  0% {
+    transform: translateY(3rem);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design para filas */
+@media (max-width: 768px) {
+  .words-viewport {
+    font-size: 1.5rem;
+    max-width: 100%;
+    padding: 0.5rem;
+    height: 9rem;
+    min-height: 9rem;
+    max-height: 9rem;
+  }
+  
+  .word-row {
+    gap: 0.8rem;
+    min-height: 2.5rem;
+    line-height: 2.5rem;
+  }
+  
+  .word-row .minimal-word {
+    height: 2.5rem;
+  }
+}
+
+/* Ocultar menu cuando las estadísticas están visibles */
+body.statistics-visible app-menu {
+  display: none !important;
+}
+
+/* ===== ESTADÍSTICAS FINALES ===== */
+.statistics-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeInScale 0.5s ease-out;
+  position: relative;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* WPM Principal */
+.main-wpm {
+  text-align: left;
+  margin-bottom: 2rem;
+  position: absolute;
+  top: 2rem;
+  left: 3rem;
+}
+
+.wpm-value {
+  font-size: 6rem;
+  font-weight: 300;
+  color: #00D9FF;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(0, 217, 255, 0.4);
+  margin: 0;
+}
+
+.wpm-label {
+  font-size: 0.9rem;
+  color: #94A3B8;
+  opacity: 0.7;
+  font-weight: 400;
+  margin-top: 0.25rem;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+}
+
+/* Accuracy */
+.accuracy-section {
+  text-align: left;
+  margin-bottom: 2rem;
+  position: absolute;
+  top: 10rem;
+  left: 3rem;
+}
+
+.accuracy-value {
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: #4caf50;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  margin: 0;
+}
+
+.accuracy-label {
+  font-size: 0.9rem;
+  color: #94A3B8;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+  text-transform: lowercase;
+  font-weight: 400;
+}
+
+/* Características del test */
+.test-characteristics {
+  text-align: left;
+  margin-bottom: 2rem;
+  position: absolute;
+  bottom: 8rem;
+  left: 3rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.test-type {
+  font-size: 0.85rem;
+  color: #64748B;
+  margin-bottom: 0.3rem;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  opacity: 0.8;
+}
+
+.test-config {
+  font-size: 0.8rem;
+  color: #475569;
+  opacity: 0.7;
+  font-style: normal;
+}
+
+/* Gráfico de ApexCharts */
+.chart-container {
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+  width: 50%;
+  max-width: 600px;
+  height: 350px;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(191, 193, 201, 0.08);
+}
+
+/* Estadísticas detalladas */
+.detailed-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 800px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  transition: none;
+}
+
+.stat-item:hover {
+  background: transparent;
+  border-color: transparent;
+  transform: none;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #64748B;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+  text-transform: lowercase;
+  font-weight: 400;
+  order: 2;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  color: #00D9FF;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  order: 1;
+  margin-bottom: 0.25rem;
+}
+
+/* Botones de acción */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  justify-content: center;
+}
+
+.action-btn {
+  background: transparent;
+  border: 1px solid #bfc1c9;
+  color: #bfc1c9;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn.primary {
+  border-color: #00D9FF;
+  color: #00D9FF;
+}
+
+.action-btn.primary:hover {
+  background: #00D9FF;
+  color: #23242a;
+  box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+}
+
+.action-btn.secondary {
+  border-color: #94A3B8;
+  color: #94A3B8;
+}
+
+.action-btn.secondary:hover {
+  background: #94A3B8;
+  color: #23242a;
+  box-shadow: 0 4px 12px rgba(148, 163, 184, 0.3);
+}
+
+.btn-icon {
+  font-size: 1.1rem;
+}
+
+/* Responsive para estadísticas */
+@media (max-width: 768px) {
+  .statistics-container {
+    padding: 1rem;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  .main-wpm {
+    position: static;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .wpm-value {
+    font-size: 4rem;
+  }
+
+  .accuracy-section {
+    position: static;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .accuracy-value {
+    font-size: 2.5rem;
+  }
+
+  .test-characteristics {
+    position: static;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .chart-container {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    height: 250px;
+    margin: 1rem 0;
+    padding: 0.5rem;
+  }
+
+  .detailed-stats {
+    position: static;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    transform: none;
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .action-buttons {
+    position: static;
+    transform: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .action-btn {
+    width: 100%;
+  }
+}

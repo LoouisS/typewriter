@@ -1,30 +1,160 @@
-<div class="minimal-language-info">
-    <span class="minimal-language-dot"></span>spanish
-    <span class="minimal-language-dot lazy"></span>lazy
-    <span class="minimal-language-meta">avg: 105 wpm 98% acc</span>
-    <span class="minimal-language-meta active">610 90% acc</span>
+<!-- Pantalla de estadísticas finales -->
+@if (testFinished()) {
+  <div class="statistics-container">
+    <!-- WPM Principal -->
+    <div class="main-wpm">
+      <div class="wpm-value">{{ finalStatistics()?.wpm || 0 }}</div>
+      <div class="wpm-label">WPM</div>
+    </div>
+
+    <!-- Accuracy -->
+    <div class="accuracy-section">
+      <div class="accuracy-value">{{ finalStatistics()?.accuracy || 0 }}%</div>
+      <div class="accuracy-label">acc</div>
+    </div>
+
+    <!-- Características del test -->
+    <div class="test-characteristics">
+      <div class="test-type">
+               test type: {{ finalStatistics()?.testType || 'unknown' }}
+       @if (finalStatistics()?.testConfig?.wordCount) {
+         | words: {{ finalStatistics()?.testConfig?.wordCount }}
+       }
+       @if (finalStatistics()?.testConfig?.duration) {
+         | time: {{ finalStatistics()?.testConfig?.duration }}s
+       }
+      </div>
+             <div class="test-config">
+         @if (finalStatistics()?.testConfig?.includeAccents) {
+           accents |
+         }
+         @if (finalStatistics()?.testConfig?.includeNumbers) {
+           numbers |
+         }
+         spanish
+       </div>
+    </div>
+
+    <!-- Gráfico de WPM por tiempo -->
+    @if (chartOptions(); as options) {
+      <div class="chart-container">
+        <apx-chart
+          [series]="options.series"
+          [chart]="options.chart"
+          [xaxis]="options.xaxis"
+          [yaxis]="options.yaxis"
+          [stroke]="options.stroke"
+          [grid]="options.grid"
+          [colors]="options.colors"
+          [tooltip]="options.tooltip">
+        </apx-chart>
+      </div>
+    }
+
+    <!-- Estadísticas detalladas -->
+    <div class="detailed-stats">
+      <div class="stat-item">
+        <span class="stat-label">raw</span>
+        <span class="stat-value">{{ finalStatistics()?.totalCharacters || 0 }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">characters</span>
+        <span class="stat-value">{{ finalStatistics()?.correctCharacters }}/{{ finalStatistics()?.incorrectCharacters }}/{{ finalStatistics()?.totalCharacters }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">consistency</span>
+        <span class="stat-value">{{ finalStatistics()?.accuracy }}%</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">time</span>
+        <span class="stat-value">{{ finalStatistics()?.timeElapsed || 0 | number:'1.0-0' }}s</span>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="action-buttons">
+      <button class="action-btn primary" (click)="resetTest()">
+        <span class="btn-icon">⟳</span>
+        try again
+      </button>
+      <button class="action-btn secondary" (click)="resetTest()">
+        <span class="btn-icon">⚙</span>
+        change config
+      </button>
+    </div>
   </div>
-  <div class="minimal-words-panel">
-    @for (wordState of wordsState(); track $index) {
-      <span [class]="getWordClasses(wordState)">
-        @if (wordState.isActive) {
-          @for (charState of currentWordWithChars(); track $index) {
-            <span [class]="getCharClasses(charState)">{{ charState.char }}</span>
-          }
-        } @else {
-          {{ wordState.text }}
-        }
-      </span>
+} @else {
+  <!-- Timer (visible durante y después del test) -->
+  @if (testState() !== 'waiting') {
+  <div class="timer-display" [class.warning]="showTimeWarning()">
+    @if (isTimeBasedTest()) {
+      <div class="timer-value">{{ formattedTime() }}</div>
+      <div class="timer-progress">
+        <div class="progress-bar" [style.width.%]="timerProgress()"></div>
+      </div>
+    } @else if (isWordBasedTest()) {
+      <div class="word-progress">
+        <div class="word-count">{{ completedWords().length }} / {{ targetWordCount() }}</div>
+        <div class="word-progress-bar">
+          <div class="progress-bar" [style.width.%]="(completedWords().length / targetWordCount()) * 100"></div>
+        </div>
+      </div>
     }
   </div>
-  <div class="minimal-restart" (click)="handleEscape()">
-    <span class="minimal-restart-icon">⟳</span>
-  </div>
+}
 
-  <!-- Debug info (opcional, se puede remover en producción) -->
-  <div class="debug-info" style="margin-top: 20px; font-size: 12px; color: #666;">
-    <div>Palabra actual: "{{ currentWord() }}"</div>
-    <div>Entrada actual: "{{ currentInput() }}"</div>
-    <div>Índice palabra: {{ currentWordIndex() }}</div>
-    <div>Palabras completadas: {{ completedWords().length }}</div>
+<!-- Panel de palabras principal con filas inmutables -->
+<div class="typewriter-container">
+  <div class="words-viewport" [attr.data-current-row]="currentRowIndex()">
+    @for (row of visibleRows(); track row.id) {
+      <div class="word-row" [attr.data-row-id]="row.id">
+        @for (wordState of row.words; track wordState.absoluteIndex) {
+          <span [class]="getWordClasses(wordState)" [attr.data-word-index]="wordState.absoluteIndex">
+            @if (wordState.isActive) {
+              @for (charState of currentWordWithChars(); track $index) {
+                <span [class]="getCharClasses(charState)">{{ charState.char }}</span>
+              }
+            } @else {
+              {{ wordState.text }}
+            }
+          </span>
+        }
+      </div>
+    }
   </div>
+</div>
+
+<!-- Controles de test -->
+@if (testState() !== 'waiting') {
+  <div class="test-controls">
+    @if (canPauseTest()) {
+      <button class="control-btn" (click)="pauseTest()">
+        <span class="control-icon">⏸</span>
+        pausar
+      </button>
+    }
+    @if (canResumeTest()) {
+      <button class="control-btn" (click)="resumeTest()">
+        <span class="control-icon">▶</span>
+        continuar
+      </button>
+    }
+    <button class="control-btn" (click)="resetTest()">
+      <span class="control-icon">⟳</span>
+      reiniciar
+    </button>
+  </div>
+}
+
+@if (testState() !== 'waiting') {
+  <div class="debug-panel">
+    <div class="debug-row">Estado: {{ testState() }} | Palabra actual: "{{ currentWord() }}" | Input: "{{ currentInput() }}"</div>
+    <div class="debug-row">Índice: {{ currentWordIndex() }}/{{ words().length }} | Fila actual: {{ currentRowIndex() }} | Filas visibles: {{ visibleRows().length }}</div>
+    @if (isTimeBasedTest()) {
+      <div class="debug-row">Modo: Tiempo | Duración: {{ configuredDuration() }}s | Tiempo restante: {{ timeRemaining() }}s</div>
+    } @else if (isWordBasedTest()) {
+      <div class="debug-row">Modo: Palabras | Target: {{ targetWordCount() }} | Completadas: {{ completedWords().length }}</div>
+    }
+  </div>
+  }
+}
