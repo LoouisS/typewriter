@@ -1,0 +1,42 @@
+<div class="minimal-options-bar">
+  <!-- Opciones secundarias (opcionales) -->
+  @for (item of secondaryMenuItems(); track item.id) {
+    <span 
+      class="minimal-option"
+      [class.active]="isSecondaryActive(item.id)"
+      (click)="toggleSecondaryMenuItem(item.id)">
+      {{ item.icon }} {{ item.name }}
+    </span>
+  }
+  
+  <!-- Separador -->
+  <div class="menu-separator"></div>
+  
+  <!-- Opciones principales (obligatorias) -->
+  @for (item of primaryMenuItems(); track item.id) {
+    <span 
+      class="minimal-option"
+      [class.active]="isPrimaryActive(item.id)"
+      (click)="selectPrimaryMenuItem(item.id)">
+      {{ item.icon }} {{ item.name }}
+    </span>
+  }
+  
+  <!-- Container animado para opciones específicas de categoría -->
+  <div class="category-options-container" [class.show]="shouldShowCategoryOptions()">
+    <div class="category-options-wrapper">
+      <!-- Separador para opciones específicas -->
+      <div class="menu-separator"></div>
+      
+      <!-- Opciones específicas -->
+      @for (option of currentCategoryOptions(); track option.id) {
+        <span 
+          class="minimal-option category-option"
+          [class.active]="isCategoryOptionActive(option.id)"
+          (click)="selectCategoryOption(option.id)">
+          {{ option.label }}
+        </span>
+      }
+    </div>
+  </div>
+</div>
